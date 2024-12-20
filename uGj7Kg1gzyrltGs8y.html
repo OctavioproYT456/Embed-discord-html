@@ -1,0 +1,307 @@
+<html><head><base href="/" />
+<style>
+:root {
+    --bg-primary: #f7f7f7;
+    --bg-secondary: #ffffff;
+    --text-primary: #2c2f33;
+    --text-secondary: #666;
+    --accent-color: #7289DA;
+    --input-border: #ddd;
+    --success: #43B581;
+    --error: #F04747;
+    --shadow: rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #2c2f33;
+    --bg-secondary: #23272A;
+    --text-primary: #ffffff;
+    --text-secondary: #b9bbbe;
+    --input-border: #4f545c;
+    --shadow: rgba(0,0,0,0.3);
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: var(--bg-secondary);
+    transition: background-color 0.3s ease;
+}
+
+.theme-switch {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    background: var(--accent-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.theme-switch:hover {
+    transform: scale(1.05);
+}
+
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    font-family: Arial, sans-serif;
+    background: var(--bg-primary);
+    border-radius: 15px;
+    box-shadow: 0 0 20px var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+input[type="text"],
+input[type="url"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 8px rgba(114,137,218,0.2);
+}
+
+.invalid {
+    border-color: var(--error) !important;
+}
+
+.error-message {
+    color: var(--error);
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+
+button {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: #677BC4;
+}
+
+.success-message, .error-message-api {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    display: none;
+    font-weight: bold;
+}
+
+.success-message {
+    background: var(--success);
+    color: white;
+}
+
+.error-message-api {
+    background: var(--error);
+    color: white;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+.title {
+    text-align: center;
+    color: var(--text-primary);
+    margin-bottom: 25px;
+    font-size: 2em;
+}
+
+.description {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.notification-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.notification-icon:hover {
+    transform: scale(1.1);
+}
+</style>
+</head>
+<body>
+<button class="theme-switch" onclick="toggleTheme()">Cambiar Tema</button>
+<div class="container">
+    <svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+    </svg>
+    <h2 class="title">Enviar Notificación Discord</h2>
+    <p class="description">Complete los campos para enviar una notificación a través de Discord</p>
+    <form id="embedForm">
+        <div class="form-group">
+            <label for="token">Bot Token:</label>
+            <input type="text" id="token" required placeholder="Ingrese el token del bot">
+            <span class="error-message" id="tokenError">Por favor ingrese un token válido</span>
+        </div>
+
+        <div class="form-group">
+            <label for="title">Título de la Notificación:</label>
+            <input type="text" id="title" required placeholder="Ingrese el título">
+            <span class="error-message" id="titleError">Por favor ingrese un título</span>
+        </div>
+
+        <div class="form-group">
+            <label for="image">URL de la Imagen:</label>
+            <input type="url" id="image" required placeholder="https://ejemplo.com/imagen.png">
+            <span class="error-message" id="imageError">Por favor ingrese una URL válida</span>
+        </div>
+
+        <div class="form-group">
+            <label for="content">Mensaje de la Notificación:</label>
+            <input type="text" id="content" required placeholder="Ingrese el mensaje">
+            <span class="error-message" id="contentError">Por favor ingrese el contenido</span>
+        </div>
+
+        <div class="form-group">
+            <label for="channel">ID del Canal:</label>
+            <input type="text" id="channel" required placeholder="Ingrese el ID del canal">
+            <span class="error-message" id="channelError">Por favor ingrese un ID de canal válido</span>
+        </div>
+
+        <button type="submit">Enviar Notificación</button>
+    </form>
+    <div class="success-message" id="successMessage">¡Notificación enviada exitosamente!</div>
+    <div class="error-message-api" id="apiError"></div>
+</div>
+
+<script>
+function toggleTheme() {
+    const body = document.body;
+    if (body.getAttribute('data-theme') === 'dark') {
+        body.removeAttribute('data-theme');
+    } else {
+        body.setAttribute('data-theme', 'dark');
+    }
+}
+
+document.getElementById('embedForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let isValid = true;
+    const errorMessages = document.getElementsByClassName('error-message');
+    
+    Array.from(errorMessages).forEach(msg => msg.style.display = 'none');
+
+    const fields = ['token', 'title', 'image', 'content', 'channel'];
+    fields.forEach(field => {
+        const element = document.getElementById(field);
+        if (!element.value.trim()) {
+            document.getElementById(`${field}Error`).style.display = 'block';
+            element.classList.add('invalid', 'shake');
+            isValid = false;
+        }
+    });
+
+    const imageUrl = document.getElementById('image');
+    try {
+        new URL(imageUrl.value);
+    } catch {
+        document.getElementById('imageError').style.display = 'block';
+        imageUrl.classList.add('invalid', 'shake');
+        isValid = false;
+    }
+
+    if (isValid) {
+        const data = {
+            token: document.getElementById('token').value,
+            título: document.getElementById('title').value,
+            image: document.getElementById('image').value,
+            contenido: document.getElementById('content').value,
+            canal: document.getElementById('channel').value
+        };
+
+        fetch('https://embed-t7j6.onrender.com/send_embed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('apiError').style.display = 'none';
+            this.reset();
+            
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+        })
+        .catch(error => {
+            document.getElementById('apiError').textContent = 'Error al enviar la notificación: ' + error.message;
+            document.getElementById('apiError').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        });
+    }
+});
+
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+    input.addEventListener('input', function() {
+        this.classList.remove('invalid', 'shake');
+        const errorId = this.id + 'Error';
+        if (document.getElementById(errorId)) {
+            document.getElementById(errorId).style.display = 'none';
+        }
+    });
+});
+</script>
+</body>
+</html>
